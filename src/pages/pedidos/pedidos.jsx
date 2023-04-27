@@ -1,47 +1,35 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../../components/navbar/navbar";
 import Pedido from "../../components/pedido/pedido";
+import api from "../../services/api.js";
 import "./pedidos.css";
-import { useEffect, useState } from "react";
 
 function Pedidos() {
 
     const [pedidos, setPedidos] = useState([]);
-    const [status, setStatus] = useState([]);
+    const [status, setStatus] = useState("");
 
-    function consultaPedidos() {
+    function consultarPedidos() {
         //alert(status);
 
-        setPedidos([
-            {
-                "id_pedido": 3,
-                "cliente": "Dicró da Guia",
-                "dt_pedido": "2023-03-19T07:15:44.1572",
-                "status": "A",
-                "status_descricao": "Aberto",
-                "vl_total": 765
-            },
-            {
-                "id_pedido": 2,
-                "cliente": "Fulano de Tal",
-                "dt_pedido": "2023-03-09T19:45:54.2092",
-                "status": "F",
-                "status_descricao": "Finalizado",
-                "vl_total": 180
-            },
-            {
-                "id_pedido": 1,
-                "cliente": "Sicrano da Silva",
-                "dt_pedido": "2023-02-15T00:00:00.1542",
-                "status": "F",
-                "status_descricao": "Finalizado",
-                "vl_total": 1400
-            }
-        ]);
-    }
+        api.get('/pedidos?status=' + status)
+            .then((retorno) => {
+                setPedidos(retorno.data);
+            })
+            .catch((err) => {
+                setPedidos([]);
+
+                if (err.response) {
+                    console.log(err.response.data);
+                }
+
+                alert("Erro ao consultar os pedidos");
+            });
+        }
 
     useEffect(() => {
-        consultaPedidos();
+        consultarPedidos();
     }, []);
     
     return <>
@@ -61,7 +49,7 @@ function Pedidos() {
                             <option value="F">Fechado</option>
                         </select>
                     </div>
-                    <button className="btn btn-primary ms-5 mb-2" onClick={consultaPedidos}>Filtrar</button>
+                    <button className="btn btn-primary ms-5 mb-2" onClick={consultarPedidos}>Filtrar</button>
                 </div>
             </div>
 
@@ -86,7 +74,8 @@ function Pedidos() {
                                                 dt_pedido={pedido.dt_pedido}
                                                 status={pedido.status}
                                                 status_descricao={pedido.status_descricao}
-                                                vl_total={pedido.vl_total} />
+                                                vl_total={pedido.vl_total}
+                                                atualizar_lista={consultarPedidos} />
                             })
                         }
                     </tbody>

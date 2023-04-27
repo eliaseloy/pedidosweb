@@ -1,16 +1,34 @@
 import { Link } from "react-router-dom";
+import api from "../../services/api";
 
 function Pedido(props){
 
     const dt_pedido = new Date(props.dt_pedido.substring(0, 19));
 
     function AlterarStatus(id_ped, stat) {
-        alert( 'Pedido n°: ' + id_ped + '   -   Status: ' + stat );
+        api.put('/pedidos/' + id_ped + '/status', {
+            status: stat
+        })
+            .then((retorno) => {
+                alert("Status do Pedido " + id_ped + " alterado com sucesso!");
+                props.atualizar_lista();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function ExcluirPedido(id_ped) {
-        alert( 'Realmente excluir o pedido ' + id_ped + '?' );
-    }
+//        alert( 'Realmente excluir o pedido ' + id_ped + '?' );
+        api.delete('/pedidos/' + id_ped)
+            .then((retorno) => {
+                alert("Pedido " + id_ped + " excluído com sucesso!");
+                props.atualizar_lista();
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        }
 
     return <tr>
         <td>{props.id_pedido}</td>

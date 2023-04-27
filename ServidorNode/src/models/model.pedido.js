@@ -168,28 +168,6 @@ function ExcluirPedido(id_pedido, callback) {
     });
 }
 
-/*function StatusPedido(id_pedido, status, callback) {
-    let ssql = "update tab_pedido set status = ? where id_pedido = ? ";
-
-    db.query(ssql, [status, id_pedido], function(err, result) {
-        if (err) {
-            callback(err, []);
-        } else {
-            if (result.length > 0) {
-                console.log("passou por aqui - teste 1");
-                console.log("result.length: " + [result].length);
-//                console.log("teste 2: " + [result].length);
-                callback(undefined, {id_pedido: id_pedido});
-            } else {
-                console.log("passou por aqui - teste 2");
-                console.log("result.length: " + [result].length);
-//                callback(undefined, "Pedido inexistente na base de dados...");
-                callback(undefined, {});
-            }
-        }
-    });
-}*/
-
 function StatusPedido(id_pedido, status, callback) {
     let ssql = "update tab_pedido set status = ? where id_pedido = ? ";
 
@@ -197,19 +175,7 @@ function StatusPedido(id_pedido, status, callback) {
         if (err) {
             callback(err, []);
         } else {
-            console.log("result: " + [result]);
-            console.log("object result: " + Object([result].entries));
-            console.log("keys: " + Object.keys(result));
-            console.log("values: " + Object.values(result));
-            console.log("values length: " + Object.values(result).length);
-            console.log("keys length: " + Object.keys(result).length);
-            console.log(Object.keys(result));
             callback(undefined, {id_pedido: id_pedido});
-            if (Object.keys(result).changedRows == 0) {
-                console.log("result.length: " + [result].length);
-            } else {
-                console.log("não encontrei object.keys(result).value(changedRows)");
-            }
         }
     });
 }

@@ -4,6 +4,7 @@ import Navbar from "../../components/navbar/navbar";
 import { v4 as uuidv4 } from "uuid";
 import "./pedido-editar.css";
 import moment from "moment/moment";
+import api from "../../services/api.js";
 
 
 function PedidoEditar() {
@@ -139,14 +140,59 @@ function PedidoEditar() {
         const dados_pedido = {
             id_cliente,
             id_cond_pagto,
-            id_usuario: 0,
+            id_usuario: localStorage.getItem("sessioId"),
             dt_pedido,
             dt_entrega,
             vl_total,
             itens: produtos
         };
+
+        if (id_pedido > 0) {
+            api.put('/pedidos/' + id_pedido, dados_pedido)
+                .then((retorno) => {
+                    if (retorno.status == 200) {
+                        alert("Pedido " + id_pedido + " alterado com sucesso!");
+                        navigate("/pedidos");
+                    } else {
+                        setMsg("Erro ao editar o pedido");
+                        console.log(retorno);
+                    }
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        if (err.response.data) {
+                            setMsg(err.response.data);
+                        } else {
+                            setMsg("Erro ao salvar o pedido!");
+                        }
+                    }
+//                    console.log(err);
+//                    props.atualizar_lista();
+                });
+        } else {
+            api.post('/pedidos/', dados_pedido)
+                .then((retorno) => {
+                    if (retorno.status == 200) {
+                        alert("Pedido incluído com sucesso!");
+                        navigate("/pedidos");
+                    } else {
+                        setMsg("Erro ao incluir o pedido");
+                        console.log(retorno);
+                    }
+                })
+                .catch((err) => {
+                    if (err.response) {
+                        if (err.response.data) {
+                            setMsg(err.response.data);
+                        } 
+                    } else {
+                        setMsg("Erro ao incluir o pedido!");
+                    }
+//                    console.log(err);
+//                    props.atualizar_lista();
+                });
+        }
         //console.log(JSON.stringify(dados_pedido));
-        navigate("/pedidos");
     }
 
     useEffect(() => {

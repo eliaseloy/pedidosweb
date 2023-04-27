@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Grafico from "../../components/grafico/grafico.jsx";
 import Navbar from "../../components/navbar/navbar.jsx";
+import api from "../../services/api.js";
 
 function Dashboard() {
 
@@ -10,54 +11,43 @@ function Dashboard() {
     const [dados_cidades, setDadosCidades] = useState([]);
 
     function GraficoClientes() {
-        setDadosClientes([
-            ["Cliente", "Vendas"],
-            ["microsoft", 5200],
-            ["IBM", 4900],
-            ["Apple", 4200],
-            ["Facebook", 3210],
-            ["Google", 2140]
-        ]);
+        api.get('/dashboard/clientes')
+            .then((retorno) => {
+                setDadosClientes(retorno.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function GraficoVendas() {
-        setDadosVendas([
-            ["Mês", "Vendas"],
-            ["Jan", 5200],
-            ["Fev", 4900],
-            ["Mar", 7200],
-            ["Abr", 3210],
-            ["Mai", 5362],
-            ["Jun", 6200],
-            ["Jul", 6852],
-            ["Ago", 4210],
-            ["Set", 5630],
-            ["Out", 8452],
-            ["Nov", 4250],
-            ["Dez", 6325]
-        ]);
+        api.get('/dashboard/vendas')
+            .then((retorno) => {
+                setDadosVendas(retorno.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function GraficoProdutos() {
-        setDadosProdutos([
-                ["Produto", "Vendas"],
-                ["Teclado", 5200],
-                ["Monitor", 4900],
-                ["HD", 7200],
-                ["Fone", 3210],
-                ["Webcam", 5362]
-        ]);
+        api.get('/dashboard/produtos')
+            .then((retorno) => {
+                setDadosProdutos(retorno.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function GraficoCidades() {
-        setDadosCidades([
-            ["Cidade", "Vendas"],
-            ["São Paulo", 5200],
-            ["Rio de Janeiro", 4900],
-            ["Teresina", 7200],
-            ["Florianópolis", 3210],
-            ["Belo Horizonte", 5362]
-        ]);
+        api.get('/dashboard/cidades')
+            .then((retorno) => {
+                setDadosCidades(retorno.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }
 
     function MontarGraficos() {
@@ -67,8 +57,19 @@ function Dashboard() {
         GraficoCidades();
     }
 
+    //Parâmetros para salvar usuário - Implementação tela de login posteriormente...
+    function SalvarDadosUsuario(id, nome, email, token) {
+        localStorage.setItem("sessionId", id);
+        localStorage.setItem("sessionNome", nome);
+        localStorage.setItem("sessionEmail", email);
+        localStorage.setItem("sessionToken", token);
+    };
+
     useEffect(() => {
         MontarGraficos();
+
+        //Simula acesso do usuário 1 e grava isto no localStorage
+        SalvarDadosUsuario("1", "pedidosweb", "pedidosweb@pedidosweb.com.br", "12345");
     }, []);
 
 return <>
