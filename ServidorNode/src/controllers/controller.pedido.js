@@ -16,14 +16,6 @@ function ListarId(req, res) {
             res.status(500).send(err);
         } else {
             res.status(Object.keys(result).length > 0 ? 200 : 404).json(result);
-//            if ([result].length > 0) {
-//                console.log("ponto a de verificação");
-//                console.log(result);
-//                res.status(200).json(result);
-//            } else {
-//                console.log("ponto b de verificação: " + [result].length);
-//                res.status(404).json({});
-//            }
         }
     });
 }

@@ -9,7 +9,7 @@ function Listar(status, callback) {
 //    ssql += "where p.id_pedido > 0 ";
 
     if (status) {
-        ssql += "where status = ? ";
+        ssql += "where p.status = ? ";
         filtro.push(status);
     }
 
@@ -69,6 +69,7 @@ function ListarId(id_pedido, callback) {
         }
     });
 }
+
 
 function InserirPedido(jsonPed, callback) {
     db.getConnection(function(err, conn) {

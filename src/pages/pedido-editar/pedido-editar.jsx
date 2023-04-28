@@ -54,15 +54,19 @@ function PedidoEditar() {
     function CarregarDadosPedido(id_ped) {
         if (id_ped > 0) {
             //significa que estou editando um pedido
-            setIdCliente(1);
-            setDtPedido("2023-10-10");
-            setIdCondPagto(3);
-            setDtEntrega("2023-10-12");
-            setObs("Entregar na parte da tarde");
-            setProdutos([
-                {id_item:1, id_produto: 1, descricao: "MONITOR DELL", qtd: 2, vl_unit: 510, vl_total: 1020},
-                {id_item:2, id_produto: 2, descricao: "HD SEAGATE 2TB", qtd: 1, vl_unit: 300, vl_total: 300}
-            ]);
+            api.get('/pedidos/' + id_ped)
+            .then((retorno) => {
+                setIdCliente(retorno.data.id_cliente);
+                setDtPedido(retorno.data.dt_pedido.substring(0, 10));
+                setIdCondPagto(retorno.data.id_cond_pagto);
+                setDtEntrega(retorno.data.dt_entrega.substring(0, 10));
+                setObs(retorno.data.obs);
+                setProdutos(retorno.data.itens);
+            })
+            .catch((err) => {
+                console.log(err);
+                alert ("Erro ao carregar dados do pedido" + id_ped);
+            });
         } else {
             //significa que estou incluindo um novo pedido
             setIdCliente(0);
@@ -75,28 +79,36 @@ function PedidoEditar() {
     }
 
     function PesquisarClientes() {
-        setListaClientes([
-            {id_cliente: 1, nome: "Sicrano da Silva"},
-            {id_cliente: 2, nome: "Fulano de Tal"},
-            {id_cliente: 3, nome: "Dicró da Guia"}
-        ]);
+        api.get('/clientes')
+        .then((retorno) => {
+            setListaClientes(retorno.data);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert ("Erro ao buscar os clientes");
+        });
     }
 
     function PesquisarCondPagtos() {
-        setCondPagtos([
-                {id_cond_pagto: 1, cond_pagto: "A vista"},
-                {id_cond_pagto: 2, cond_pagto: "Pix"},
-                {id_cond_pagto: 3, cond_pagto: "Cartão de Crédito"},
-                {id_cond_pagto: 4, cond_pagto: "Cartão de Débito"}
-        ]);
+        api.get('/condpagtos')
+        .then((retorno) => {
+            setCondPagtos(retorno.data);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert ("Erro ao buscar as condições de pagamento");
+        });
     }
 
     function PesquisarProdutos() {
-        setListaProdutos([
-            {id_item:1, id_produto: 1, descricao: "MONITOR DELL"},
-            {id_item:2, id_produto: 2, descricao: "HD SEAGATE 2TB"},
-            {id_item:3, id_produto: 3, descricao: "MOUSE LOGITECH"}
-        ]);
+        api.get('/produtos')
+        .then((retorno) => {
+            setListaProdutos(retorno.data);
+        })
+        .catch((err) => {
+            console.log(err);
+            alert ("Erro ao buscar os produtos");
+        });
     }
 
     function handleDescricaoChange(id_produto, descricao, index) {

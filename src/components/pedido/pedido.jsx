@@ -10,7 +10,7 @@ function Pedido(props){
             status: stat
         })
             .then((retorno) => {
-                alert("Status do Pedido " + id_ped + " alterado com sucesso!");
+  //              alert("Status do Pedido " + id_ped + " alterado com sucesso!");
                 props.atualizar_lista();
             })
             .catch((err) => {
@@ -22,7 +22,7 @@ function Pedido(props){
 //        alert( 'Realmente excluir o pedido ' + id_ped + '?' );
         api.delete('/pedidos/' + id_ped)
             .then((retorno) => {
-                alert("Pedido " + id_ped + " excluído com sucesso!");
+//                alert("Pedido " + id_ped + " excluído com sucesso!");
                 props.atualizar_lista();
             })
             .catch((err) => {
